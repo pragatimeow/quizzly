@@ -22,11 +22,58 @@ import {
     Button,
     Box,
 } from "@mui/material";
+import styled from "styled-components";
+
+const QuizContainer = styled(Container)`
+    && {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+`;
+
+const Title = styled(Typography)`
+    && {
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+`;
+
+const QuestionList = styled(List)`
+    && {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+    }
+`;
+
+const QuestionItem = styled(ListItem)`
+    && {
+        &:not(:last-child) {
+            border-bottom: 1px solid #eee;
+        }
+    }
+`;
+
+const StyledButton = styled(Button)`
+    && {
+        background-color: #f0ad4e;
+        color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        &:hover {
+            background-color: #eea236;
+        }
+    }
+`;
 
 const Quiz = () => {
     const { quizId } = useParams();
     const [quiz, setQuiz] = useState(null);
-    const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState();
     const [userAnswers, setUserAnswers] = useState({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [showResults, setShowResults] = useState(false);
@@ -109,17 +156,17 @@ const Quiz = () => {
     const currentQuestion = questions[currentQuestionIndex];
 
     return (
-        <Container maxWidth="sm" sx={{ mt: 4 }}>
-            <Typography variant="h4" gutterBottom>
+        <QuizContainer maxWidth="sm" sx={{ mt: 4 }}>
+            <Title variant="h4" gutterBottom>
                 {quiz.title}
-            </Typography>
+            </Title>
             {!showResults ? (
                 <>
                     <Typography variant="h6" gutterBottom>
                         Question {currentQuestionIndex + 1} / {questions.length}
                     </Typography>
-                    <List>
-                        <ListItem>
+                    <QuestionList>
+                        <QuestionItem>
                             <ListItemText
                                 primary={`${currentQuestionIndex + 1}. ${currentQuestion.text}`}
                                 sx={{ fontWeight: "bold" }}
@@ -146,9 +193,9 @@ const Quiz = () => {
                                     ))}
                                 </RadioGroup>
                             </FormControl>
-                        </ListItem>
-                    </List>
-                    <Button
+                        </QuestionItem>
+                    </QuestionList>
+                    <StyledButton
                         variant="contained"
                         color="primary"
                         onClick={handleNextQuestion}
@@ -157,7 +204,7 @@ const Quiz = () => {
                         {currentQuestionIndex === questions.length - 1
                             ? "Finish"
                             : "Next"}
-                    </Button>
+                    </StyledButton>
                 </>
             ) : (
                 <Box sx={{ textAlign: "center" }}>
@@ -172,8 +219,8 @@ const Quiz = () => {
                                 score / questions.length > 0.7
                                     ? "green"
                                     : score / questions.length > 0.4
-                                    ? "orange"
-                                    : "red",
+                                        ? "orange"
+                                        : "red",
                         }}
                     >
                         You scored {score} out of {questions.length}
@@ -187,7 +234,7 @@ const Quiz = () => {
                     </Button>
                 </Box>
             )}
-        </Container>
+        </QuizContainer>
     );
 };
 

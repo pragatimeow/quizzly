@@ -9,11 +9,57 @@ import {
     Typography,
     Link,
 } from "@mui/material";
+import styled from "styled-components";
+
+const LoginContainer = styled(Container)`
+    && {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 32px;
+        margin-top: 8rem;
+        text-align: center;
+    }
+`;
+
+const Title = styled(Typography)`
+    && {
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+`;
+
+const Form = styled(Box)`
+    && {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+`;
+
+const SubmitButton = styled(Button)`
+    && {
+        background-color: #f0ad4e;
+        color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        &:hover {
+            background-color: #eea236;
+        }
+    }
+`;
+
+const SocialButton = styled(Button)`
+    && {
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+`;
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { login } = useContext(AuthContext);
+    const { login, googleSignIn } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -23,9 +69,18 @@ const Login = () => {
             navigate("/profile");
         } catch (error) {
             console.error("Login failed:", error);
-            // TODO: Display error message to the user
         }
     };
+
+    const handleGoogleSignIn = async () => {
+        try {
+            await googleSignIn();
+            navigate("/profile");
+        } catch (error) {
+            console.error("Google Sign In failed:", error);
+        }
+    };
+
 
     return (
         <div style={{
@@ -36,29 +91,11 @@ const Login = () => {
             justifyContent: 'center',
             alignItems: 'center'
         }}>
-            <Container
-                maxWidth="xs"
-                sx={{
-                    bgcolor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
-                    borderRadius: "8px",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                    p: 4,
-                    mt: 8,
-                    textAlign: "center",
-                }}
-            >
-                <Typography variant="h5" gutterBottom>
+            <LoginContainer maxWidth="xs">
+                <Title variant="h5" gutterBottom>
                     Login
-                </Typography>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                    }}
-                >
+                </Title>
+                <Form component="form" onSubmit={handleSubmit}>
                     <TextField
                         label="Email"
                         type="email"
@@ -75,22 +112,27 @@ const Login = () => {
                         required
                         fullWidth
                     />
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                    >
+                    <SubmitButton type="submit" variant="contained" fullWidth>
                         Login
-                    </Button>
+                    </SubmitButton>
                     <Typography variant="body2">
                         Don't have an account?{" "}
                         <Link component={RouterLink} to="/register">
                             Register
                         </Link>
                     </Typography>
+                </Form>
+                <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+                <SocialButton
+    variant="outlined"
+    startIcon={<img src="https://img.icons8.com/color/16/null/google-logo.png" alt="Google logo" />} // Added alt attribute
+    onClick={handleGoogleSignIn}
+    fullWidth
+>
+    Login with Google
+</SocialButton>
                 </Box>
-            </Container>
+            </LoginContainer>
         </div>
     );
 };

@@ -8,11 +8,28 @@ import {
     FormControlLabel,
     Radio,
 } from "@mui/material";
+import styled from "styled-components";
+
+const QuestionList = styled(List)`
+    && {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+`;
+
+const QuestionItem = styled(ListItem)`
+    && {
+        &:not(:last-child) {
+            border-bottom: 1px solid #eee;
+        }
+    }
+`;
 
 const Question = ({ question, userAnswer, onAnswer, showResults }) => {
     return (
-        <List>
-            <ListItem>
+        <QuestionList>
+            <QuestionItem>
                 <ListItemText
                     primary={question.text}
                     sx={{ fontWeight: "bold" }}
@@ -21,9 +38,7 @@ const Question = ({ question, userAnswer, onAnswer, showResults }) => {
                     <RadioGroup
                         aria-labelledby={`question-${question.id}-label`}
                         name={`question-${question.id}`}
-                        onChange={(e) =>
-                            onAnswer(question.id, e.target.value)
-                        }
+                        onChange={(e) => onAnswer(question.id, e.target.value)}
                     >
                         {question.options.map((option, index) => (
                             <FormControlLabel
@@ -36,8 +51,8 @@ const Question = ({ question, userAnswer, onAnswer, showResults }) => {
                         ))}
                     </RadioGroup>
                 </FormControl>
-            </ListItem>
-        </List>
+            </QuestionItem>
+        </QuestionList>
     );
 };
 

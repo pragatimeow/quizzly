@@ -16,9 +16,56 @@ import {
     Button,
     Typography,
 } from "@mui/material";
+import styled from "styled-components";
+
+const QuizListContainer = styled(Container)`
+    && {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+`;
+
+const Title = styled(Typography)`
+    && {
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+`;
+
+const QuestionList = styled(List)`
+    && {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+    }
+`;
+
+const QuestionItem = styled(ListItem)`
+    && {
+        &:not(:last-child) {
+            border-bottom: 1px solid #eee;
+        }
+    }
+`;
+
+const StyledButton = styled(Button)`
+    && {
+        background-color: #f0ad4e;
+        color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        &:hover {
+            background-color: #eea236;
+        }
+    }
+`;
 
 const QuizList = () => {
-    const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState();
     const [selectedCategory, setSelectedCategory] = useState("javascript");
     const [isLoading, setIsLoading] = useState(true);
     const [userAnswers, setUserAnswers] = useState({});
@@ -79,10 +126,10 @@ const QuizList = () => {
     };
 
     return (
-        <Container maxWidth="sm" sx={{ mt: 4 }}>
-            <Typography variant="h4" gutterBottom>
+        <QuizListContainer maxWidth="sm" sx={{ mt: 4 }}>
+            <Title variant="h4" gutterBottom>
                 Quiz Questions ({selectedCategory})
-            </Typography>
+            </Title>
             <FormControl fullWidth sx={{ mb: 2 }}>
                 <InputLabel id="category-select-label">Category</InputLabel>
                 <Select
@@ -102,11 +149,11 @@ const QuizList = () => {
             ) : (
                 <>
                     {!showScore && (
-                        <List>
+                        <QuestionList>
                             {questions.map((question, index) => (
-                                <ListItem key={question.id} sx={{ mb: 2, display: "block" }}>
+                                <QuestionItem key={question.id} sx={{ mb: 2, display: "block" }}>
                                     <ListItemText
-                                        primary={`${index + 1}. ${question.text}`} // Number the question
+                                        primary={`${index + 1}. ${question.text}`}
                                         sx={{ fontWeight: "bold" }}
                                     />
                                     <FormControl>
@@ -131,18 +178,18 @@ const QuizList = () => {
                                             ))}
                                         </RadioGroup>
                                     </FormControl>
-                                </ListItem>
+                                </QuestionItem>
                             ))}
-                        </List>
+                        </QuestionList>
                     )}
                     {!showScore && (
-                        <Button
+                        <StyledButton
                             variant="contained"
                             color="primary"
                             onClick={handleSubmit}
                         >
                             Submit
-                        </Button>
+                        </StyledButton>
                     )}
                     {showScore && (
                         <Typography
@@ -171,7 +218,7 @@ const QuizList = () => {
                     )}
                 </>
             )}
-        </Container>
+        </QuizListContainer>
     );
 };
 

@@ -22,9 +22,64 @@ import {
     updateDoc,
     deleteDoc,
 } from "firebase/firestore";
+import styled from "styled-components";
+
+const PanelContainer = styled(Container)`
+    && {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+`;
+
+const Title = styled(Typography)`
+    && {
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+`;
+
+const Form = styled(Box)`
+    && {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+`;
+
+const StyledButton = styled(Button)`
+    && {
+        background-color: #f0ad4e; // Quizizz orange color
+        color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        &:hover {
+            background-color: #eea236; // Slightly darker orange on hover
+        }
+    }
+`;
+
+const QuestionList = styled(List)`
+    && {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+`;
+
+const QuestionItem = styled(ListItem)`
+    && {
+        &:not(:last-child) {
+            border-bottom: 1px solid #eee;
+        }
+    }
+`;
 
 const AdminPanel = () => {
-    const [questions, setQuestions] = useState([]); // Initialize as an empty array
+    const [questions, setQuestions] = useState([]);
     const [newQuestion, setNewQuestion] = useState({
         text: "",
         options: ["", "", "", ""],
@@ -45,7 +100,7 @@ const AdminPanel = () => {
 
     useEffect(() => {
         fetchQuestions();
-    }, []); // Add empty dependency array to run only once on mount
+    },);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -108,19 +163,13 @@ const AdminPanel = () => {
     };
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4 }}>
-            <Typography variant="h4" gutterBottom>
+        <PanelContainer maxWidth="md" sx={{ mt: 4 }}>
+            <Title variant="h4" gutterBottom>
                 Admin Panel - Quiz Questions
-            </Typography>
-            <Box
+            </Title>
+            <Form
                 component="form"
                 onSubmit={editQuestionId ? updateQuestion : addQuestion}
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    mb: 4,
-                }}
             >
                 <TextField
                     label="Question Text"
@@ -175,21 +224,18 @@ const AdminPanel = () => {
                         <MenuItem value="python">Python</MenuItem>
                     </Select>
                 </FormControl>
-                <Button type="submit" variant="contained" color="primary">
+                <StyledButton type="submit" variant="contained" color="primary">
                     {editQuestionId ? "Update Question" : "Add Question"}
-                </Button>
+                </StyledButton>
                 {editQuestionId && (
-                    <Button
-                        variant="outlined"
-                        onClick={() => setEditQuestionId(null)}
-                    >
+                    <Button variant="outlined" onClick={() => setEditQuestionId(null)}>
                         Cancel Edit
                     </Button>
                 )}
-            </Box>
-            <List>
+            </Form>
+            <QuestionList>
                 {questions.map((question) => (
-                    <ListItem key={question.id} sx={{ mb: 2 }}>
+                    <QuestionItem key={question.id} sx={{ mb: 2 }}>
                         <ListItemText
                             primary={question.text}
                             secondary={`Correct Answer: ${question.correctAnswer}, Category: ${question.category}`}
@@ -211,10 +257,10 @@ const AdminPanel = () => {
                                 Delete
                             </Button>
                         </Box>
-                    </ListItem>
+                    </QuestionItem>
                 ))}
-            </List>
-        </Container>
+            </QuestionList>
+        </PanelContainer>
     );
 };
 

@@ -1,7 +1,8 @@
 // --- src/App.jsx ---
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/authPages/Login';
+import MainPage from './components/mainpage';
 import Register from './components/authPages/Register';
 import Profile from './components/profilePages/Profile';
 import QuizList from './components/quizFeatures/QuizList';
@@ -37,8 +38,8 @@ function App() {
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/quizFeatures" element={<PrivateRoute><QuizList /></PrivateRoute>} />
           {isAdmin && <Route path="/admin" element={<PrivateRoute><AdminPanel /></PrivateRoute>} />}
-          <Route path="/" element={<Navigate replace to="/login" />} />
-        </Routes>
+          <Route path="/" element={<MainPage />} />
+          </Routes>
       </Router>
     </AuthProvider>
   );

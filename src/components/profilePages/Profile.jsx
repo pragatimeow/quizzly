@@ -12,8 +12,32 @@ import {
     Divider,
 } from "@mui/material";
 import { updateProfile } from "firebase/auth";
-import { doc, updateDoc, getDoc, setDoc } from "firebase/firestore"; 
+import { doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import styled from "styled-components";
+
+const ProfileContainer = styled(Container)`
+    && {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-top: 4rem;
+    }
+`;
+
+
+const StyledButton = styled(Button)`
+    && {
+        background-color: #f0ad4e;
+        color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        &:hover {
+            background-color: #eea236;
+        }
+    }
+`;
 
 const Profile = () => {
     const { currentUser, logout } = useContext(AuthContext);
@@ -67,14 +91,12 @@ const Profile = () => {
 
             const userDocRef = doc(db, "users", currentUser.uid);
             const userDocSnap = await getDoc(userDocRef);
-            
+
             if (userDocSnap.exists()) {
-                // Update existing document
                 await updateDoc(userDocRef, {
                     description: description,
                 });
             } else {
-                // Create new document
                 await setDoc(userDocRef, {
                     description: description,
                 });
@@ -96,7 +118,7 @@ const Profile = () => {
     }
 
     return (
-        <Container maxWidth="sm" sx={{ mt: 4 }}>
+        <ProfileContainer maxWidth="sm" sx={{ mt: 4 }}>
             <Paper elevation={3} sx={{ p: 4, bgcolor: "background.paper" }}>
                 <Box sx={{ mb: 4, textAlign: "center" }}>
                     {isEditing ? (
@@ -141,9 +163,9 @@ const Profile = () => {
                 <Divider sx={{ mb: 2 }} />
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {isEditing ? (
-                        <Button variant="contained" onClick={handleProfileUpdate}>
+                        <StyledButton variant="contained" onClick={handleProfileUpdate}>
                             Save Changes
-                        </Button>
+                        </StyledButton>
                     ) : (
                         <Button variant="outlined" onClick={handleEditProfile}>
                             Edit Profile
@@ -154,7 +176,7 @@ const Profile = () => {
                     </Button>
                 </Box>
             </Paper>
-        </Container>
+        </ProfileContainer>
     );
 };
 
