@@ -88,8 +88,8 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
-        googleSignIn, // Add this
-        githubSignIn, // Add this
+        googleSignIn,
+        githubSignIn, 
         loading,
     };
 
