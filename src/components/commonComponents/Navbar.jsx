@@ -1,45 +1,12 @@
 import React, { useContext } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import styled from "styled-components";
 
-const Nav = styled.nav`
-    background-color: #343a40;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-const NavTitle = styled(Link)`
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2rem;
-`;
-
-const NavLinks = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const NavLink = styled(Link)`
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-    &:hover {
-        text-decoration: underline;
-    }
-`;
-
-const LogoutButton = styled.button`
-    background: none;
-    border: none;
-    color: white;
-    margin-left: 20px;
-    cursor: pointer;
-    &:hover {
-        text-decoration: underline;
+const NavbarContainer = styled(AppBar)`
+    && {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 `;
 
@@ -57,30 +24,44 @@ const Navbar = () => {
         }
     };
 
-    const adminEmails = ["spycatmeow24@gmail.com"];
-    const isAdmin = currentUser && adminEmails.includes(currentUser.email);
-
     return (
-        <Nav>
-            <NavTitle to={currentUser ? "/profile" : "/"}>Quizzly</NavTitle>
-            <NavLinks>
+        <NavbarContainer position="static">
+            <Toolbar>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    <Link to={currentUser ? "/profile" : "/"} style={{ textDecoration: 'none', color: 'white' }}>
+                        Quizzly
+                    </Link>
+                </Typography>
                 {currentUser && location.pathname !== "/login" ? (
                     <>
-                        <NavLink to="/profile">Profile</NavLink>
-                        <NavLink to="/quizFeatures">Quizzes</NavLink>
-                        {isAdmin && <NavLink to="/admin">Admin Panel</NavLink>}
-                        <LogoutButton onClick={handleLogout}>
+                        <Button color="inherit" component={Link} to="/profile">
+                            Profile
+                        </Button>
+                        <Button color="inherit" component={Link} to="/quizFeatures">
+                            Quizzes
+                        </Button>
+                        <Button color="inherit" component={Link} to="/create-quiz">
+                            Create Quiz
+                        </Button>
+                        <Button color="inherit" component={Link} to="/my-quizzes">
+                            My Quizzes
+                        </Button>
+                        <Button color="inherit" onClick={handleLogout}>
                             Logout
-                        </LogoutButton>
+                        </Button>
                     </>
                 ) : (
                     <>
-                        <NavLink to="/login">Login</NavLink>
-                        <NavLink to="/register">Register</NavLink>
+                        <Button color="inherit" component={Link} to="/login">
+                            Login
+                        </Button>
+                        <Button color="inherit" component={Link} to="/register">
+                            Register
+                        </Button>
                     </>
                 )}
-            </NavLinks>
-        </Nav>
+            </Toolbar>
+        </NavbarContainer>
     );
 };
 

@@ -1,222 +1,146 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { db } from "../../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import {
     Container,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
+    Typography,
+    Grid,
     List,
     ListItem,
     ListItemText,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    Button,
-    Typography,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const QuizListContainer = styled(Container)`
     && {
-        background-color: #f5f5f5;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 2rem;
+        min-height: 100vh;
     }
 `;
 
-const Title = styled(Typography)`
-    && {
-        font-weight: bold;
-        margin-bottom: 1rem;
-        text-align: center;
+const CategorySection = styled.div`
+    background-color: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 `;
 
-const QuestionList = styled(List)`
+const CategoryTitle = styled(Typography)`
     && {
-        background-color: white;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #333;
+        font-family: 'Roboto Slab', serif;
+        letter-spacing: 0.5px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
 `;
 
-const QuestionItem = styled(ListItem)`
+const QuizItem = styled(ListItem)`
     && {
-        &:not(:last-child) {
-            border-bottom: 1px solid #eee;
-        }
-    }
-`;
+        transition: background-color 0.3s ease;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
 
-const StyledButton = styled(Button)`
-    && {
-        background-color: #f0ad4e;
-        color: white;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         &:hover {
-            background-color: #eea236;
+            background-color: #f0f0f0;
         }
     }
 `;
 
 const QuizList = () => {
-    const [questions, setQuestions] = useState();
-    const [selectedCategory, setSelectedCategory] = useState("javascript");
+    const [quizzes, setQuizzes] = useState([]);
+    const [availableCategories, setAvailableCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [userAnswers, setUserAnswers] = useState({});
-    const [showScore, setShowScore] = useState(false);
-    const [score, setScore] = useState(0);
+
+    const fetchQuizzes = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const querySnapshot = await getDocs(collection(db, "quizzes"));
+            const fetchedQuizzes = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setQuizzes(fetchedQuizzes);
+
+            const categoryQuerySnapshot = await getDocs(collection(db, "categories"));
+            const fetchedCategories = categoryQuerySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setAvailableCategories(fetchedCategories);
+
+        } catch (error) {
+            console.error("Error fetching quizzes:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [setQuizzes, setAvailableCategories]);
 
     useEffect(() => {
-        const fetchQuestions = async () => {
-            setIsLoading(true);
-            try {
-                const questionsRef = collection(db, "questions");
-                const q = query(
-                    questionsRef,
-                    where("category", "==", selectedCategory),
-                );
-                const querySnapshot = await getDocs(q);
-                const fetchedQuestions = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-                setQuestions(fetchedQuestions);
-            } catch (error) {
-                console.error("Error fetching questions:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchQuestions();
-    }, [selectedCategory]);
-
-    const handleCategoryChange = (event) => {
-        setSelectedCategory(event.target.value);
-        setShowScore(false);
-        setScore(0);
-        setUserAnswers({});
-    };
-
-    const handleAnswerChange = (questionId, answer) => {
-        setUserAnswers({ ...userAnswers, [questionId]: answer });
-    };
-
-    const handleSubmit = () => {
-        let newScore = 0;
-        questions.forEach((question) => {
-            if (userAnswers[question.id] === question.correctAnswer) {
-                newScore++;
-            }
-        });
-        setScore(newScore);
-        setShowScore(true);
-    };
-
-    const handleRetake = () => {
-        setShowScore(false);
-        setScore(0);
-        setUserAnswers({});
-    };
+        fetchQuizzes();
+    }, [fetchQuizzes]);
 
     return (
-        <QuizListContainer maxWidth="sm" sx={{ mt: 4 }}>
-            <Title variant="h4" gutterBottom>
-                Quiz Questions ({selectedCategory})
-            </Title>
-            <FormControl fullWidth sx={{ mb: 2 }}>
-                <InputLabel id="category-select-label">Category</InputLabel>
-                <Select
-                    labelId="category-select-label"
-                    id="category-select"
-                    value={selectedCategory}
-                    label="Category"
-                    onChange={handleCategoryChange}
-                >
-                    <MenuItem value="javascript">JavaScript</MenuItem>
-                    <MenuItem value="python">Python</MenuItem>
-                </Select>
-            </FormControl>
+        <QuizListContainer maxWidth="lg" sx={{ mt: 4 }}>
+            <Typography
+                variant="h4"
+                align="center"
+                gutterBottom
+                style={{
+                    fontFamily: 'Montserrat',
+                    fontWeight: 600,
+                    color: '#2c3e50',
+                    backgroundColor: 'transparent',
+                }}
+            >
+                Quizzes
+            </Typography>
 
             {isLoading ? (
-                <Typography variant="body1">Loading questions...</Typography>
+                <Typography variant="body1">Loading quizzes...</Typography>
             ) : (
-                <>
-                    {!showScore && (
-                        <QuestionList>
-                            {questions.map((question, index) => (
-                                <QuestionItem key={question.id} sx={{ mb: 2, display: "block" }}>
-                                    <ListItemText
-                                        primary={`${index + 1}. ${question.text}`}
-                                        sx={{ fontWeight: "bold" }}
-                                    />
-                                    <FormControl>
-                                        <RadioGroup
-                                            aria-labelledby={`question-${question.id}-label`}
-                                            name={`question-${question.id}`}
-                                            onChange={(e) =>
-                                                handleAnswerChange(
-                                                    question.id,
-                                                    e.target.value,
-                                                )
-                                            }
-                                        >
-                                            {question.options.map((option, optionIndex) => (
-                                                <FormControlLabel
-                                                    key={optionIndex}
-                                                    value={option}
-                                                    control={<Radio />}
-                                                    label={option}
-                                                    disabled={showScore}
-                                                />
-                                            ))}
-                                        </RadioGroup>
-                                    </FormControl>
-                                </QuestionItem>
-                            ))}
-                        </QuestionList>
-                    )}
-                    {!showScore && (
-                        <StyledButton
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSubmit}
-                        >
-                            Submit
-                        </StyledButton>
-                    )}
-                    {showScore && (
-                        <Typography
-                            variant="h6"
-                            gutterBottom
-                            sx={{
-                                color:
-                                    score / questions.length > 0.7
-                                        ? "green"
-                                        : score / questions.length > 0.4
-                                            ? "orange"
-                                            : "red",
-                            }}
-                        >
-                            You scored {score} out of {questions.length}
-                        </Typography>
-                    )}
-                    {showScore && (
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            onClick={handleRetake}
-                        >
-                            Retake Quiz
-                        </Button>
-                    )}
-                </>
+                <Grid container spacing={3}>
+                    {availableCategories.map((cat) => (
+                        <Grid item xs={12} sm={6} md={4} key={cat.id}>
+                            <CategorySection>
+                                <CategoryTitle variant="h6" component="div">
+                                    {cat.name}
+                                </CategoryTitle>
+                                <List>
+                                    {quizzes
+                                        .filter((quiz) => quiz.category === cat.name)
+                                        .map((quiz, index) => (
+                                            <QuizItem key={quiz.id} component={Link} to={`/quiz/${quiz.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                                <ListItemText primary={`${index + 1}. ${quiz.title} - By ${quiz.creatorName}`} />
+                                            </QuizItem>
+                                        )).length > 0 ? (
+                                            quizzes
+                                                .filter((quiz) => quiz.category === cat.name)
+                                                .map((quiz, index) => (
+                                                    <QuizItem key={quiz.id} component={Link} to={`/quiz/${quiz.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                                        <ListItemText primary={`${index + 1}. ${quiz.title} - By ${quiz.creatorName}`} />
+                                                    </QuizItem>
+                                                ))
+                                        ) : (
+                                            <ListItem>
+                                                <ListItemText primary="No quizzes available" />
+                                            </ListItem>
+                                        )}
+                                </List>
+                            </CategorySection>
+                        </Grid>
+                    ))}
+                </Grid>
             )}
         </QuizListContainer>
     );

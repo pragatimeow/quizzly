@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../../firebase";
-import {
-    doc,
-    getDoc,
-    collection,
-    query,
-    where,
-    getDocs,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import {
     Container,
     Typography,
@@ -52,6 +45,8 @@ const QuestionList = styled(List)`
 
 const QuestionItem = styled(ListItem)`
     && {
+        flex-direction: column; // Stack items vertically
+        align-items: flex-start; // Align items to the start
         &:not(:last-child) {
             border-bottom: 1px solid #eee;
         }
@@ -73,7 +68,7 @@ const StyledButton = styled(Button)`
 const Quiz = () => {
     const { quizId } = useParams();
     const [quiz, setQuiz] = useState(null);
-    const [questions, setQuestions] = useState();
+    const [questions, setQuestions] = useState([]);
     const [userAnswers, setUserAnswers] = useState({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [showResults, setShowResults] = useState(false);
@@ -90,18 +85,7 @@ const Quiz = () => {
                 if (quizDocSnap.exists()) {
                     const quizData = quizDocSnap.data();
                     setQuiz(quizData);
-
-                    const questionsRef = collection(db, "questions");
-                    const q = query(
-                        questionsRef,
-                        where("quizId", "==", quizId),
-                    );
-                    const querySnapshot = await getDocs(q);
-                    const fetchedQuestions = querySnapshot.docs.map((doc) => ({
-                        id: doc.id,
-                        ...doc.data(),
-                    }));
-                    setQuestions(fetchedQuestions);
+                    setQuestions(quizData.questions);
                 } else {
                     console.log("Quiz not found!");
                 }
@@ -115,7 +99,8 @@ const Quiz = () => {
         fetchQuizData();
     }, [quizId]);
 
-    const handleAnswerChange = (questionId, answer) => {
+    const handleAnswerChange = (questionIndex, answer) => {
+        const questionId = questions[questionIndex].question;
         setUserAnswers({ ...userAnswers, [questionId]: answer });
     };
 
@@ -130,8 +115,9 @@ const Quiz = () => {
 
     const calculateScore = () => {
         let newScore = 0;
-        questions.forEach((question) => {
-            if (userAnswers[question.id] === question.correctAnswer) {
+        questions.forEach((question, index) => {
+            const questionId = question.question;
+            if (userAnswers[questionId] === question.answer) {
                 newScore++;
             }
         });
@@ -168,17 +154,17 @@ const Quiz = () => {
                     <QuestionList>
                         <QuestionItem>
                             <ListItemText
-                                primary={`${currentQuestionIndex + 1}. ${currentQuestion.text}`}
+                                primary={`${currentQuestionIndex + 1}. ${currentQuestion.question}`}
                                 sx={{ fontWeight: "bold" }}
                             />
-                            <FormControl>
+                            <FormControl sx={{ width: "100%" }}>
                                 <RadioGroup
-                                    aria-labelledby={`question-${currentQuestion.id}-label`}
-                                    name={`question-${currentQuestion.id}`}
+                                    aria-labelledby={`question-${currentQuestionIndex}-label`}
+                                    name={`question-${currentQuestionIndex}`}
                                     onChange={(e) =>
                                         handleAnswerChange(
-                                            currentQuestion.id,
-                                            e.target.value,
+                                            currentQuestionIndex,
+                                            e.target.value
                                         )
                                     }
                                 >

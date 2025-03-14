@@ -1,16 +1,18 @@
 {
-  "name": "live-quiz-app",
-  "version": "0.1.0",
+  "name": "quizzly",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "firebase": "^9.23.0",
-    "firebase-admin": "^13.1.0",
+    "firebase-admin": "^13.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.2",
+    "react-toastify": "^11.0.5",
     "styled-components": "^6.0.4"
   },
   "devDependencies": {

@@ -66,7 +66,7 @@ const Login = () => {
         e.preventDefault();
         try {
             await login(email, password);
-            navigate("/profile");
+            navigate("/");
         } catch (error) {
             console.error("Login failed:", error);
         }
@@ -75,12 +75,11 @@ const Login = () => {
     const handleGoogleSignIn = async () => {
         try {
             await googleSignIn();
-            navigate("/profile");
+            navigate("/");
         } catch (error) {
             console.error("Google Sign In failed:", error);
         }
     };
-
 
     return (
         <div style={{
@@ -121,16 +120,21 @@ const Login = () => {
                             Register
                         </Link>
                     </Typography>
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                        <Link component={RouterLink} to="/forgot-password">
+                            Forgot Password?
+                        </Link>
+                    </Typography>
                 </Form>
                 <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-                <SocialButton
-    variant="outlined"
-    startIcon={<img src="https://img.icons8.com/color/16/null/google-logo.png" alt="Google logo" />} // Added alt attribute
-    onClick={handleGoogleSignIn}
-    fullWidth
->
-    Login with Google
-</SocialButton>
+                    <SocialButton
+                        variant="outlined"
+                        startIcon={<img src="https://img.icons8.com/color/16/null/google-logo.png" alt="Google logo" />}
+                        onClick={handleGoogleSignIn}
+                        fullWidth
+                    >
+                        Login with Google
+                    </SocialButton>
                 </Box>
             </LoginContainer>
         </div>
