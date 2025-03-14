@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { Box, Button, Container, Typography } from "@mui/material";
 import styled from "styled-components";
 
-// Import background image (replace with your actual image path)
-import backgroundImage from "./quizzly.svg"; // Assuming the image is in the same directory
+import backgroundImage from "./quizzly.svg";
 
 const MainContainer = styled(Container)`
     && {

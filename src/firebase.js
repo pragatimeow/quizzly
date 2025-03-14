@@ -1,4 +1,3 @@
-// --- src/firebase.js (configure your Firebase project) ---
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore'; // Import compat Firestore
