@@ -7,8 +7,23 @@ import styled from "styled-components";
 const NavbarContainer = styled(AppBar)`
     && {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position:fixed;
+        top:0;
+        width:100%;
+        background-color:#661EAE;
     }
+
 `;
+
+const Test = styled(Button)`
+    &&{
+        color:white;
+    }
+    &:hover{
+        background-color:white;
+        color:#661EAE;
+    }
+`
 
 const Navbar = () => {
     const { currentUser, logout } = useContext(AuthContext);
@@ -34,31 +49,32 @@ const Navbar = () => {
                 </Typography>
                 {currentUser && location.pathname !== "/login" ? (
                     <>
-                        <Button color="inherit" component={Link} to="/profile">
-                            Profile
-                        </Button>
-                        <Button color="inherit" component={Link} to="/quizFeatures">
-                            Quizzes
-                        </Button>
-                        <Button color="inherit" component={Link} to="/create-quiz">
-                            Create Quiz
-                        </Button>
-                        <Button color="inherit" component={Link} to="/my-quizzes">
-                            My Quizzes
-                        </Button>
-                        <Button color="inherit" onClick={handleLogout}>
-                            Logout
-                        </Button>
-                    </>
+                    <Test component={Link} to="/profile" variant="text">
+                        Profile
+                    </Test>
+                    <Test component={Link} to="/quizFeatures" variant="text">
+                        Quizzes
+                    </Test>
+                    <Test  component={Link} to="/create-quiz" variant="text">
+                        Create Quiz
+                    </Test>
+                    <Test component={Link} to="/my-quizzes" variant="text">
+                        My Quizzes
+                    </Test>
+                    <Test onClick={handleLogout}>
+                        Logout
+                    </Test>
+                </>
                 ) : (
-                    <>
-                        <Button color="inherit" component={Link} to="/login">
-                            Login
-                        </Button>
-                        <Button color="inherit" component={Link} to="/register">
-                            Register
-                        </Button>
-                    </>
+                <>
+                    <Test component={Link} to="/login" variant="text">
+                        Login
+                    </Test>
+                    <Test component={Link} to="/register" variant="text">
+                        Register
+                    </Test>
+                </>
+                
                 )}
             </Toolbar>
         </NavbarContainer>

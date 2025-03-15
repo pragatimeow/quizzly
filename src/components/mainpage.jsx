@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Box, Button, Container, Typography } from "@mui/material";
 import styled from "styled-components";
 
-import backgroundImage from "./quizzly.svg";
+import backgroundImage from "./main-bg.jpg";
 
 const MainContainer = styled(Container)`
     && {
@@ -26,7 +26,7 @@ const Title = styled(Typography)`
         font-size: 3.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
-        color: #2e3192; // Quizizz blue
+        color: #ffffff; // Quizizz blue
         line-height: 1.2;
     }
 `;
@@ -38,6 +38,12 @@ const Subtitle = styled(Typography)`
         color: #555;
     }
 `;
+
+ const Last = styled(Typography)`
+    &&{
+        font-size:2rem;
+    }
+ `
 
 const ButtonContainer = styled(Box)`
     && {
@@ -87,13 +93,14 @@ const SecondaryButton = styled(StyledButton)`
 const MainPage = () => {
     return (
         <MainContainer maxWidth="xl">
-            <Title variant="h1"> Free Quizzes for Developers</Title>
+            <Title variant="h1"> Free Quizzes for <span style={{color:"#9966ff"}}>Developers</span></Title>
             <Subtitle variant="body1">
-                "I had no idea Quizzly could do that." - Almost everybody
+            <span style={{fontSize:"3rem",fontWeight:"bolder"}}>"I had no idea Quizzly could do that."</span> <br/> <span>~Almost everybody</span>
             </Subtitle>
-            <Typography variant="body2" gutterBottom>
-                Create and deliver bell-to-bell resources that meet the needs of every developer.
-            </Typography>
+            <hr style={{width:"50%"}}/>
+            <Last variant="body2" gutterBottom>
+                Create and deliver bell-to-bell resources <br/> that meet the needs of every developer.
+            </Last>
             <ButtonContainer>
                 <PrimaryButton component={Link} to="/register" variant="contained">
                     Sign up for free

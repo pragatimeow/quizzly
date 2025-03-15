@@ -38,7 +38,6 @@ const CategoryTitle = styled(Typography)`
         font-weight: 700;
         margin-bottom: 1.5rem;
         color: #333;
-        font-family: 'Roboto Slab', serif;
         letter-spacing: 0.5px;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
