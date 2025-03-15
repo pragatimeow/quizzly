@@ -1,10 +1,11 @@
+// MyQuizzes.jsx
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { db } from '../firebase';
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { AuthContext } from '../contexts/AuthContext';
 import { Container, Grid, Card, CardMedia, CardContent, Typography, IconButton, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { Delete } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -68,7 +69,7 @@ const MyQuizzes = () => {
                                 <CardMedia
                                     component="img"
                                     height="140"
-                                    image={'https://quizizz.com/media/resource/gs/quizizz-media/quizzes/ecddb5de-3ec1-48d3-a42f-14c9af23d4e4'} // Replace placeholder with actual image
+                                    image={'https://quizizz.com/media/resource/gs/quizizz-media/quizzes/ecddb5de-3ec1-48d3-a42f-14c9af23d4e4'}
                                     alt={quiz.title}
                                 />
                                 <CardContent>
@@ -83,13 +84,21 @@ const MyQuizzes = () => {
                                                 Category: {quiz.category}
                                             </Typography>
                                         </Box>
-                                        <IconButton
-                                            edge="end"
-                                            aria-label="delete"
-                                            onClick={() => handleDeleteQuiz(quiz.id)}
-                                        >
-                                            <Delete />
-                                        </IconButton>
+                                        <Box>
+                                            <IconButton
+                                                aria-label="edit"
+                                                onClick={() => navigate(`/edit-quiz/${quiz.id}`)}
+                                            >
+                                                <Edit />
+                                            </IconButton>
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={() => handleDeleteQuiz(quiz.id)}
+                                            >
+                                                <Delete />
+                                            </IconButton>
+                                        </Box>
                                     </Box>
                                 </CardContent>
                             </Card>

@@ -16,6 +16,7 @@ import CreateQuiz from './components/CreateQuiz'; // Import CreateQuiz
 import Quiz from './components/quizFeatures/Quiz';
 import MyQuizzes from './components/MyQuizzes';
 import QuizDetails from './components/QuizDetails';
+import EditQuiz from './components/EditQuizzes';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -47,6 +48,14 @@ function App() {
           <Route path="/my-quizzes" element={<PrivateRoute><MyQuizzes /></PrivateRoute>} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/quiz-details/:quizId" element={<PrivateRoute><QuizDetails /></PrivateRoute>} />
+          <Route
+                        path="/edit-quiz/:quizId"
+                        element={
+                            <PrivateRoute>
+                                <EditQuiz />
+                            </PrivateRoute>
+                        }
+                    />
           </Routes>
       </Router>
     </AuthProvider>
