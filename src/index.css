@@ -1,7 +1,6 @@
 /* Color Scheme */
 body {
-    background-color: lightblue;
-    background-size: cover; /* or 'contain' depending on your preference */
+    background-color: lightpink;
     color: #282c34; /* Darker text color for contrast */
 }
 
@@ -22,10 +21,14 @@ button:hover {
     background-color: #218838; /* Darker green on hover */
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-    font-family: "Roboto", sans-serif; /* Example font */
-}
+hr {
+    border: 0;
+    clear:both;
+    display:block;
+    width: 96%;               
+    background-color:#FFFF00;
+    height: 1px;
+  }
 
 /* Interactive Elements */
 button {

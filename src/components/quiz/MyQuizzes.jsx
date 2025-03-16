@@ -1,13 +1,21 @@
-// MyQuizzes.jsx
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { Container, Grid, Card, CardMedia, CardContent, Typography, IconButton, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { Delete, Edit } from '@mui/icons-material';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import styled from 'styled-components'; 
+
+const StyledContainer = styled(Container)`
+    && {
+        padding-top: 5rem;
+
+
+    }
+`;
 
 const MyQuizzes = () => {
     const [myQuizzes, setMyQuizzes] = useState([]);
@@ -57,7 +65,7 @@ const MyQuizzes = () => {
     };
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4 }}>
+        <StyledContainer maxWidth="md"> 
             <Typography variant="h4" align="center" gutterBottom>
                 My Quizzes
             </Typography>
@@ -101,15 +109,15 @@ const MyQuizzes = () => {
                                         </Box>
                                     </Box>
                                 </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Grid>
-            ) : (
-                <Typography variant="body1" align="center">You haven't created any quizzes yet.</Typography>
-            )}
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                ) : (
+                    <Typography variant="body1" align="center">You haven't created any quizzes yet.</Typography>
+                )}
             <ToastContainer />
-        </Container>
+        </StyledContainer>
     );
 };
 

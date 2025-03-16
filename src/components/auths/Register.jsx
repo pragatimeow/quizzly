@@ -67,7 +67,7 @@ const Register = () => {
         e.preventDefault();
         try {
             await register(email, password, displayName);
-            navigate("/");
+            navigate("/home");
         } catch (error) {
             console.error("Registration failed:", error);
         }
@@ -76,7 +76,7 @@ const Register = () => {
     const handleGoogleSignIn = async () => {
         try {
             await googleSignIn();
-            navigate("/");
+            navigate("/home");
         } catch (error) {
             console.error("Google Sign In failed:", error);
         }

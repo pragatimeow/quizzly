@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import {
     TextField,
@@ -28,6 +28,7 @@ const StyledContainer = styled(Container)`
         display: flex;
         justify-content: center;
         align-items: flex-start;
+        padding-top: 5rem; 
     }
 `;
 

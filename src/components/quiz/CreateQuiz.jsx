@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Box, Typography, Paper, IconButton } from '@mui/material';
 import { AddCircleOutline, DeleteOutline } from '@mui/icons-material';
-import { db, auth } from '../firebase';
+import { db, auth } from '../../firebase';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import styled from 'styled-components';
 import { toast, ToastContainer } from 'react-toastify';

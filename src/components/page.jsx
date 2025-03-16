@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, Container, Typography } from "@mui/material";
 import styled from "styled-components";
-
+import { AuthContext } from "../contexts/AuthContext";
 import backgroundImage from "../assets/main-bg.jpg";
 
 const MainContainer = styled(Container)`
@@ -11,17 +11,14 @@ const MainContainer = styled(Container)`
         flex-direction: column;
         align-items: center;
         justify-content: center;
-            min-height: 100vh;
-            min-width: 100vw;
-            background-image: url(${backgroundImage});
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+        min-height: 100vh;
+                    min-width: 100vw;
+        background-image: url(${backgroundImage});
+        background-size: cover;
+        background-position: center;
         text-align: center;
         padding: 4rem 2rem;
-        height: 100%;
-        width: 100%
-        color: #333; 
+        color: #333;
     }
 `;
 
@@ -43,11 +40,11 @@ const Subtitle = styled(Typography)`
     }
 `;
 
- const Last = styled(Typography)`
-    &&{
-        font-size:2rem;
+const Last = styled(Typography)`
+    && {
+        font-size: 2rem;
     }
- `
+`;
 
 const ButtonContainer = styled(Box)`
     && {
@@ -73,7 +70,7 @@ const StyledButton = styled(Button)`
 
 const PrimaryButton = styled(StyledButton)`
     && {
-        background-color: #673ab7; // Quizizz purple
+        background-color: #673ab7;
         color: white;
         &:hover {
             background-color: #512da8;
@@ -87,35 +84,34 @@ const SecondaryButton = styled(StyledButton)`
         border: 2px solid #673ab7;
         color: #673ab7;
         &:hover {
-            background-color: #f3e5f5; // Light purple hover
+            background-color: #f3e5f5;
         }
     }
 `;
 
+const LoggedIn = () => {
+    const { currentUser } = useContext(AuthContext);
 
-
-const MainPage = () => {
     return (
         <MainContainer maxWidth="xl">
-            <Title variant="h1"> Free Quizzes for <span style={{color:"#9966ff"}}>Developers</span></Title>
+            <Title variant="h1">Welcome Back, {currentUser?.displayName || "Developer"}!</Title>
             <Subtitle variant="body1">
-            <span style={{fontSize:"3rem",fontWeight:"bolder"}}>"I had no idea Quizzly could do that."</span> <br/> <span>~Almost everybody</span>
+                <span style={{ fontSize: "3rem", fontWeight: "bolder" }}>"Ready to create some quizzes?"</span> <br /> <span>~Quizzly</span>
             </Subtitle>
-            <hr style={{width:"50%"}}/>
+            <hr style={{ width: "50%" }} />
             <Last variant="body2" gutterBottom>
-                Create and deliver bell-to-bell resources <br/> that meet the needs of every developer.
+                Create and deliver bell-to-bell resources <br /> that meet the needs of every developer.
             </Last>
             <ButtonContainer>
-                <PrimaryButton component={Link} to="/register" variant="contained">
-                    Sign up for free
+                <PrimaryButton component={Link} to="/create-quiz" variant="contained">
+                    Create a Quiz
                 </PrimaryButton>
-                <SecondaryButton component={Link} to="/login" variant="outlined">
-                    Login from Here
+                <SecondaryButton component={Link} to="/quiz" variant="outlined">
+                    Check Out Quizzes
                 </SecondaryButton>
             </ButtonContainer>
-        
         </MainContainer>
     );
 };
 
-export default MainPage;
+export default LoggedIn;
