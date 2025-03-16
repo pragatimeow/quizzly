@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import { Box, Button, Container, Typography } from "@mui/material";
 import styled from "styled-components";
 
+<<<<<<< HEAD
 import backgroundImage from "../assets/main-bg.jpg";
+=======
+import backgroundImage from "./main-bg.jpg";
+>>>>>>> 2586c8321fcbb284a822c0b754adbe58025dc10f
 
 const MainContainer = styled(Container)`
     && {
@@ -30,7 +34,11 @@ const Title = styled(Typography)`
         font-size: 3.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
+<<<<<<< HEAD
         color: #ffffff;
+=======
+        color: #ffffff; // Quizizz blue
+>>>>>>> 2586c8321fcbb284a822c0b754adbe58025dc10f
         line-height: 1.2;
     }
 `;

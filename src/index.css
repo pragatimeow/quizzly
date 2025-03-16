@@ -1,6 +1,10 @@
 /* Color Scheme */
 body {
     background-color: lightpink;
+<<<<<<< HEAD
+=======
+    background-size: cover; /* or 'contain' depending on your preference */
+>>>>>>> 2586c8321fcbb284a822c0b754adbe58025dc10f
     color: #282c34; /* Darker text color for contrast */
 }
 
