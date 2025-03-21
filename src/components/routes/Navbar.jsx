@@ -7,6 +7,8 @@ import Profile from './profile.png';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HelpOutline from '@mui/icons-material/HelpOutline';
 import ExitToApp from '@mui/icons-material/ExitToApp';
+import QuizIcon from '@mui/icons-material/Quiz';
+import AddIcon from '@mui/icons-material/Add';
 
 const NavbarContainer = styled(AppBar)`
     && {
@@ -27,7 +29,18 @@ const Test = styled(Button)`
         color: #661EAE;
     }
 `;
+const CreateQuizButton = styled(Button)`
+  && {
+    color: white;
+    padding: 10px 20px;
+    font-family: "Figtree", sans-serif;
+    font-weight: 600;
+    text-transform: none; // Prevent uppercase transformation
+    align-items: center;
+    gap: 8px; // Space between text and icon
 
+  }
+`;
 const Navbar = () => {
     const { currentUser, logout } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -62,27 +75,33 @@ const Navbar = () => {
                 </Typography>
                 {currentUser && location.pathname !== "/login" ? (
                     <>
-                      
+
                         <Menu
                             anchorEl={anchorEl}
                             open={open}
                             onClose={handleClose}
                             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            
+
                         >
                             <MenuItem sx={{ color: 'black' }}>
-                                <Avatar src={Profile} sx={{ width: 30, height: 30, marginRight: 1 }}/>
+                                <Avatar src={Profile} sx={{ width: 30, height: 30, marginRight: 1 }} />
                                 <div>
                                     <Typography style={{ fontFamily: "Figtree", fontSize: '15px' }} variant="subtitle2">{currentUser.displayName || 'User'}</Typography>
-                                    <Typography style={{ fontFamily: "Figtree", fontSize: '15px'  }} variant="caption">{currentUser.email}</Typography>
+                                    <Typography style={{ fontFamily: "Figtree", fontSize: '15px' }} variant="caption">{currentUser.email}</Typography>
                                 </div>
                             </MenuItem>
                             <MenuItem onClick={() => { navigate('/settings'); handleClose(); }}>
                                 <ListItemIcon>
                                     <SettingsOutlinedIcon />
                                 </ListItemIcon>
-                                <ListItemText  primary="settings" />
+                                <ListItemText primary="settings" />
+                            </MenuItem>
+                            <MenuItem onClick={() => { navigate('/my-quizzes'); handleClose(); }}>
+                                <ListItemIcon>
+                                    < QuizIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="My Quizzes" />
                             </MenuItem>
                             <MenuItem onClick={() => { navigate('/help'); handleClose(); }}>
                                 <ListItemIcon>
@@ -96,23 +115,22 @@ const Navbar = () => {
                                 </ListItemIcon>
                                 <ListItemText primary="Logout" />
                             </MenuItem>
+
                         </Menu>
                         <Test style={{ fontFamily: "Figtree" }} component={Link} to="/quiz" variant="text">
                             Quizzes
                         </Test>
-                        <Test style={{ fontFamily: "Figtree" }} component={Link} to="/create-quiz" variant="text">
-                            Create Quiz
-                        </Test>
-                        <Test style={{ fontFamily: "Figtree" }} component={Link} to="/my-quizzes" variant="text">
-                            My Quizzes
-                        </Test>
+                        <CreateQuizButton component={Link} to="/create-quiz" variant="text">
+                            <AddIcon />
+                            Create
+                        </CreateQuizButton>
                         <IconButton onClick={handleClick} sx={{ color: 'white' }}>
                             <Avatar src={Profile} alt="Profile" sx={{ width: 30, height: 30 }} />
                         </IconButton>
                     </>
                 ) : (
                     <>
-                        <Test style={{ fontFamily: "Figtree" }}component={Link} to="/login" variant="text">
+                        <Test style={{ fontFamily: "Figtree" }} component={Link} to="/login" variant="text">
                             Login
                         </Test>
                         <Test style={{ fontFamily: "Figtree" }} component={Link} to="/register" variant="text">

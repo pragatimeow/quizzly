@@ -26,23 +26,21 @@ const ProfileContainer = styled(Container)`
     }
 `;
 
-
 const StyledButton = styled(Button)`
     && {
-        background-color: #f0ad4e;
+        background-color: #673ab7;
         color: white;
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         &:hover {
-            background-color: #eea236;
+            background-color: #512da8;
         }
     }
 `;
 
 const Profile = () => {
-    const { currentUser, logout } = useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [isEditing, setIsEditing] = useState(false);
     const [displayName, setDisplayName] = useState(currentUser?.displayName || "");
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(true);
@@ -56,7 +54,8 @@ const Profile = () => {
                     const userDocSnap = await getDoc(userDocRef);
 
                     if (userDocSnap.exists()) {
-                        setDescription(userDocSnap.data().description || "");
+                        const userData = userDocSnap.data();
+                        setDescription(userData.description || "");
                     }
                 }
             } catch (error) {
@@ -69,19 +68,6 @@ const Profile = () => {
         fetchUserData();
     }, [currentUser]);
 
-    const handleLogout = async () => {
-        try {
-            await logout();
-            navigate("/login");
-        } catch (error) {
-            console.error("Logout failed:", error);
-            setErrorMessage("Logout failed. Please try again.");
-        }
-    };
-
-    const handleEditProfile = () => {
-        setIsEditing(true);
-    };
 
     const handleProfileUpdate = async () => {
         try {
@@ -101,8 +87,6 @@ const Profile = () => {
                     description: description,
                 });
             }
-
-            setIsEditing(false);
         } catch (error) {
             console.error("Profile update failed:", error);
             setErrorMessage("Profile update failed. Please try again.");
@@ -121,59 +105,47 @@ const Profile = () => {
         <ProfileContainer maxWidth="sm" sx={{ mt: 4 }}>
             <Paper elevation={3} sx={{ p: 4, bgcolor: "background.paper" }}>
                 <Box sx={{ mb: 4, textAlign: "center" }}>
-                    {isEditing ? (
-                        <TextField
-                            label="Display Name"
-                            value={displayName}
-                            onChange={(e) => setDisplayName(e.target.value)}
-                            fullWidth
-                            sx={{ mt: 2 }}
-                        />
-                    ) : (
-                        <>
-                            <Avatar
-                                alt="User Avatar"
-                                src={"https://wallpaperaccess.com/full/2384073.jpg"}
-                                sx={{ width: 80, height: 80, mb: 1 }}
-                            />
-                            <Typography variant="h5" component="div">
-                                {displayName || "User"}
-                            </Typography>
-                        </>
-                    )}
+                    <Avatar
+                        alt="User Avatar"
+                        src={"https://wallpaperaccess.com/full/2384073.jpg"}
+                        sx={{ width: 80, height: 80, mb: 1 }}
+                    />
+                    <Typography variant="h5" component="div">
+                        {displayName || "User"}
+                    </Typography>
                 </Box>
                 <Divider sx={{ mb: 2 }} />
                 <Box sx={{ mb: 4 }}>
                     <Typography variant="body1" gutterBottom>
                         Email: {currentUser.email}
                     </Typography>
-                    {isEditing ? (
-                        <TextField
-                            label="Description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            multiline
-                            rows={4}
-                            fullWidth
-                        />
-                    ) : (
-                        <Typography variant="body2">{description}</Typography>
-                    )}
+                    
+
+                    <TextField
+                        label="Full name"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
+                    <TextField
+                        label="Biography (optional)"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        multiline
+                        rows={4}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
                 </Box>
                 <Divider sx={{ mb: 2 }} />
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    {isEditing ? (
-                        <StyledButton variant="contained" onClick={handleProfileUpdate}>
-                            Save Changes
-                        </StyledButton>
-                    ) : (
-                        <Button variant="outlined" onClick={handleEditProfile}>
-                            Edit Profile
-                        </Button>
-                    )}
-                    <Button variant="contained" color="error" onClick={handleLogout}>
-                        Logout
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Button variant="outlined" onClick={() => navigate(-1)}>
+                        Cancel
                     </Button>
+                    <StyledButton variant="contained" onClick={handleProfileUpdate}>
+                        Save Changes
+                    </StyledButton>
                 </Box>
             </Paper>
         </ProfileContainer>

@@ -1,6 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, } from "react";
 import { Link } from "react-router-dom";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Container,
+    Typography,
+
+} from "@mui/material";
 import styled from "styled-components";
 import { AuthContext } from "../contexts/AuthContext";
 import backgroundImage from "../assets/main-bg.jpg";
@@ -12,7 +18,7 @@ const MainContainer = styled(Container)`
         align-items: center;
         justify-content: center;
         min-height: 100vh;
-                    min-width: 100vw;
+        min-width: 100vw;
         background-image: url(${backgroundImage});
         background-size: cover;
         background-position: center;

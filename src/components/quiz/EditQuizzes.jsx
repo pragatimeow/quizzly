@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, getDocs, collection } from 'firebase/firestore';
 import {
     TextField,
     Button,
@@ -38,7 +38,7 @@ const StyledPaper = styled(Paper)`
         margin-bottom: 2rem;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 95%; /* Ensure it takes full width of its parent */
+        width: 95%;
     }
 `;
 const StyledForm = styled(Box)`
@@ -62,6 +62,7 @@ const EditQuiz = () => {
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [availableCategories, setAvailableCategories] = useState([]);
 
     useEffect(() => {
         const fetchQuiz = async () => {
@@ -81,7 +82,22 @@ const EditQuiz = () => {
                 setLoading(false);
             }
         };
+
+        const fetchCategories = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(db, "categories"));
+                const fetchedCategories = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setAvailableCategories(fetchedCategories);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+
         fetchQuiz();
+        fetchCategories();
     }, [quizId, navigate]);
 
     const handleInputChange = (e) => {
@@ -136,12 +152,11 @@ const EditQuiz = () => {
             });
             setTimeout(() => {
                 navigate('/my-quizzes');
-            }, 3500); 
+            }, 3500);
         } catch (error) {
             toast.error('Failed to update quiz.');
         }
     };
-
 
     if (loading) {
         return <Typography>Loading...</Typography>;
@@ -161,37 +176,37 @@ const EditQuiz = () => {
                 <FormControl fullWidth sx={{ mb: 3 }}>
                     <InputLabel id="category-label">Category</InputLabel>
                     <Select labelId="category-label" id="category" name="category" value={quiz.category} label="Category" onChange={handleInputChange}>
-                        <MenuItem value={'Math'}>Math</MenuItem>
-                        <MenuItem value={'Science'}>Science</MenuItem>
-                        <MenuItem value={'History'}>History</MenuItem>
-                        <MenuItem value={'Geography'}>Geography</MenuItem>
-                        <MenuItem value={'General Knowledge'}>General Knowledge</MenuItem>
-                        <MenuItem value={'Technology'}>Technology</MenuItem>
-                        <MenuItem value={'Entertainment'}>Entertainment</MenuItem>
+                        {availableCategories.map((cat) => (
+                            <MenuItem key={cat.id} value={cat.name}>
+                                {cat.name}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
-                {quiz.questions.map((question, index) => (
-                    <StyledPaper key={index}>
-                        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                            <Typography variant="h6">Question {index + 1}</Typography>
-                            <IconButton onClick={() => handleRemoveQuestion(index)}>
-                                <DeleteOutline />
-                            </IconButton>
-                        </Box>
-                        <TextField label={`Question ${index + 1}`} fullWidth value={question.question} onChange={(e) => handleQuestionChange(index, 'question', e.target.value)} sx={{ mb: 2 }} />
-                        {question.options.map((option, optionIndex) => (
-                            <TextField
-                                key={optionIndex}
-                                label={`Option ${optionIndex + 1}`}
-                                fullWidth
-                                value={question.options[optionIndex]}
-                                onChange={(e) => handleOptionChange(index, optionIndex, e.target.value)}
-                                sx={{ mb: 2 }}
-                            />
-                        ))}
-                        <TextField label="Answer" fullWidth value={question.answer} onChange={(e) => handleQuestionChange(index, 'answer', e.target.value)} />
-                    </StyledPaper>
-                ))}
+                <Box sx={{ maxHeight: '60vh', overflowY: 'auto', overflowX: 'hidden', mb: 2 }}>
+                    {quiz.questions.map((question, index) => (
+                        <StyledPaper key={index}>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                                <Typography variant="h6">Question {index + 1}</Typography>
+                                <IconButton onClick={() => handleRemoveQuestion(index)}>
+    <DeleteOutline />
+</IconButton>
+                            </Box>
+                            <TextField label={`Question ${index + 1}`} fullWidth value={question.question} onChange={(e) => handleQuestionChange(index, 'question', e.target.value)} sx={{ mb: 2 }} />
+                            {question.options.map((option, optionIndex) => (
+                                <TextField
+                                    key={optionIndex}
+                                    label={`Option ${optionIndex + 1}`}
+                                    fullWidth
+                                    value={question.options[optionIndex]}
+                                    onChange={(e) => handleOptionChange(index, optionIndex, e.target.value)}
+                                    sx={{ mb: 2 }}
+                                />
+                            ))}
+                            <TextField label="Answer" fullWidth value={question.answer} onChange={(e) => handleQuestionChange(index, 'answer', e.target.value)} />
+                        </StyledPaper>
+                    ))}
+                </Box>
                 <ActionButtons>
                     <IconButton onClick={handleAddQuestion}>
                         <AddCircleOutline fontSize="large" />

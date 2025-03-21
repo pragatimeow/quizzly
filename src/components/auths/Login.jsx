@@ -13,11 +13,17 @@ import {
 } from "@mui/material";
 import styled from "styled-components";
 import logo from '../../assets/quizzly.png';
+import backgroundImage from "../../assets/main-bg.jpg"; // Option from current branch
 
 const LoginContainer = styled(Grid)`
     && {
-        min-height: 100vh;
-        background-color: #F8BBD0;
+    
+          min-height: 100vh;
+            min-width: 100vw;
+            background-image: url(${backgroundImage});
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         color: #333;
         display: flex;
         justify-content: center;
@@ -124,16 +130,16 @@ const Login = () => {
                         </Box>
                         <Title variant="h5">Sign in</Title>
                         <Form component="form" onSubmit={handleSubmit}>
-                            <Typography variant="body2" sx={{ mb: 0.5, textAlign: 'left' }}>Email</Typography>
+                            <Typography variant="body2" sx={{ mb: -1, textAlign: 'left', fontFamily: 'Bebas Neue', fontSize: '25px' }}>Email</Typography>
                             <TextField label="" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth variant="outlined" />
-                            <Typography variant="body2" sx={{ mb: 0.5, textAlign: 'left' }}>Password</Typography>
+                            <Typography variant="body2" sx={{ mb: -1, textAlign: 'left', fontFamily: 'Bebas Neue', fontSize: '25px' }}>Password</Typography>
                             <TextField label="" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required fullWidth variant="outlined" />
-                            <SubmitButton type="submit" variant="contained" fullWidth>Sign in</SubmitButton>
+                            <SubmitButton type="submit" style={{ backgroundColor: 'black', color: 'whitesmoke', fontSize: '15px', fontFamily: 'monospace'}} variant="contained" fullWidth>Sign in</SubmitButton>
                         </Form>
                         <Typography variant="body2" style={{ marginTop: '1rem', marginBottom: '1rem',textAlign: 'center', }}>
                             <Link component={RouterLink} to="/forgot-password" style={{ color: 'black', fontSize: '20px' }}>Forgot Password?</Link>
                         </Typography>
-                        <SocialButton variant="outlined" startIcon={<img src="https://img.icons8.com/color/16/null/google-logo.png" alt="Google logo" />} onClick={handleGoogleSignIn} fullWidth>Sign in with Google</SocialButton>
+                        <SocialButton variant="outlined" style={{ backgroundColor: 'black', color: 'whitesmoke', fontSize: '15px', fontFamily: 'monospace'}} startIcon={<img src="https://img.icons8.com/color/16/null/google-logo.png" alt="Google logo" />} onClick={handleGoogleSignIn} fullWidth>Sign in with Google</SocialButton>
                         <Typography variant="body2" style={{ marginTop: '1rem', textAlign: 'center' }}>
                             Don't have an account? <Link component={RouterLink} to="/register" style={{ color: 'black', fontSize: '15px', }}>Register</Link>
                         </Typography>

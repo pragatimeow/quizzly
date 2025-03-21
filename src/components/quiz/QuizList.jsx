@@ -24,7 +24,7 @@ const CategorySection = styled.div`
     padding: 2rem;
     margin-bottom: 2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
@@ -90,8 +90,8 @@ const QuizList = () => {
     }, [fetchQuizzes]);
 
     return (
-        <QuizListContainer maxWidth="lg" sx={{ mt: 4 }}>
-            <Typography
+        <QuizListContainer maxWidth="lg"  sx={{mt: 4 ,}}>
+            <Typography 
                 variant="h4"
                 align="center"
                 gutterBottom
@@ -106,16 +106,16 @@ const QuizList = () => {
             </Typography>
 
             {isLoading ? (
-                <Typography variant="body1">Loading quizzes...</Typography>
+                <Typography  variant="body1">Loading quizzes...</Typography>
             ) : (
                 <Grid container spacing={3}>
                     {availableCategories.map((cat) => (
-                        <Grid item xs={12} sm={6} md={4} key={cat.id}>
-                            <CategorySection>
-                                <CategoryTitle variant="h6" component="div">
+                        <Grid  item xs={12} sm={6} md={4} key={cat.id}>
+                            <CategorySection  >
+                                <CategoryTitle  variant="h6" component="div">
                                     {cat.name}
                                 </CategoryTitle>
-                                <List>
+                                <List >
                                     {quizzes
                                         .filter((quiz) => quiz.category === cat.name)
                                         .map((quiz, index) => (

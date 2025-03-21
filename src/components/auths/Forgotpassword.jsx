@@ -12,7 +12,7 @@ import {
 import styled from "styled-components";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import logo from '../../assets/quizzly.png';
 const ForgotPasswordContainer = styled(Container)`
     && {
         background-color: rgba(255, 255, 255, 0.8);
@@ -28,21 +28,10 @@ const Form = styled(Box)`
     && {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 1.5rem; /* Increased gap for better spacing */
     }
 `;
 
-const SubmitButton = styled(Button)`
-    && {
-        background-color: #f0ad4e;
-        color: white;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        &:hover {
-            background-color: #eea236;
-        }
-    }
-`;
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
@@ -89,21 +78,29 @@ const ForgotPassword = () => {
             alignItems: 'center'
         }}>
             <ForgotPasswordContainer maxWidth="xs">
-                <Typography variant="h5" gutterBottom>
+            <Box display="flex" justifyContent="left" alignItems="left" marginBottom="1rem">
+                            <img src={logo} alt="Quizzly Logo" style={{ width: '30px', height: '30px', marginRight: '8px' }}/>
+                            <Typography variant="h5">Quizzly</Typography>
+                        </Box>
+                <Typography sx={{ fontWeight: 'bold', marginBottom: '1rem', fontSize: '40px', textAlign: 'left' }} variant="h5" gutterBottom>
                     Forgot Password
                 </Typography>
                 <Form component="form" onSubmit={handleResetPassword}>
+                    <Typography variant="body2" sx={{ mb: -1, textAlign: 'left', fontFamily: 'Bebas Neue', fontSize: '25px' }}>
+                        Email
+                    </Typography>
                     <TextField
-                        label="Email"
+                        label=""
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         fullWidth
+                        variant="outlined" 
                     />
-                    <SubmitButton type="submit" variant="contained" fullWidth>
+                    <Button style={{ backgroundColor: 'black', color: 'whitesmoke', fontSize: '15px', fontFamily: 'monospace'}} type="submit" variant="contained" fullWidth>
                         Send Reset Link
-                    </SubmitButton>
+                    </Button>
                 </Form>
                 <ToastContainer />
             </ForgotPasswordContainer>
